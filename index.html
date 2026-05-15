@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowPilot — Business Automation</title>
+<meta name="description" content="Custom automation systems for logistics and manufacturing companies. Save time, reduce errors, grow faster.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#0b0c0f; --bg2:#13151a; --bg3:#1c1f27;
+  --border:rgba(255,255,255,0.07);
+  --accent:#3b82f6; --accent2:#60a5fa;
+  --text:#f0f0f0; --muted:#8b8fa8; --muted2:#5a5e72;
+  --green:#22c55e; --amber:#f59e0b; --red:#ef4444;
+}
+html { scroll-behavior: smooth; }
+body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-weight:400; line-height:1.6; font-size:16px; overflow-x:hidden; }
+
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0.5rem 2.5rem;
+  background:rgba(11,12,15,0.9); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.nav-left { display:flex; flex-direction:column; gap:3px; }
+.logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:var(--text); text-decoration:none; letter-spacing:-0.02em; line-height:1; }
+.logo span { color:var(--accent); }
+.nav-clock { display:flex; align-items:center; gap:7px; }
+.nav-clock svg { width:26px; height:26px; flex-shrink:0; }
+.nav-clock-time { font-family:'Syne',sans-serif; font-weight:700; font-size:0.72rem; color:rgba(255,255,255,0.55); letter-spacing:0.02em; line-height:1; }
+.nav-clock-label { font-size:0.58rem; color:var(--muted2); letter-spacing:0.08em; text-transform:uppercase; }
+.nav-links { display:flex; gap:2rem; list-style:none; align-items:center; }
+.nav-links a { color:var(--muted); text-decoration:none; font-size:0.88rem; font-weight:500; transition:color 0.2s; }
+.nav-links a:hover { color:var(--text); }
+.nav-right { display:flex; align-items:center; gap:0.75rem; }
+.lang-switch { display:flex; gap:0.3rem; flex-wrap:wrap; justify-content:flex-end; max-width:200px; }
+.lang-btn { background:none; border:1px solid var(--border); color:var(--muted); padding:0.18rem 0.45rem; border-radius:5px; font-size:0.68rem; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; }
+.lang-btn:hover,.lang-btn.active { border-color:var(--accent); color:var(--accent); }
+@media(max-width:768px){ .nav-links { display:none; } nav { padding:0.5rem 1rem; } .nav-clock-label { display:none; } .lang-switch { max-width:160px; } .lang-btn { padding:0.15rem 0.35rem; font-size:0.65rem; } }
+@media(max-width:480px){ .hero { padding:7rem 1rem 3rem; } .contact-wrap { padding:1.5rem; } .anim-grid { gap:1rem; } }
+
+.hero { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:8rem 2rem 4rem; position:relative; overflow:hidden; text-align:center; }
+.hero-grid { position:absolute; inset:0; background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px); background-size:60px 60px; mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black 30%,transparent 100%); }
+.hero-glow { position:absolute; top:20%; left:50%; transform:translateX(-50%); width:600px; height:300px; background:radial-gradient(ellipse,rgba(59,130,246,0.12) 0%,transparent 70%); pointer-events:none; }
+.hero-content { position:relative; max-width:780px; }
+.badge { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.25); color:var(--accent2); padding:0.35rem 1rem; border-radius:100px; font-size:0.8rem; font-weight:500; margin-bottom:2rem; }
+.badge-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(2.5rem,6vw,4rem); line-height:1.1; letter-spacing:-0.03em; margin-bottom:1.5rem; }
+h1 em { font-style:normal; color:var(--accent); }
+.hero-sub { font-size:1.1rem; color:var(--muted); max-width:560px; margin:0 auto 2.5rem; line-height:1.7; font-weight:300; }
+.btn-group { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+.btn-primary { background:var(--accent); color:#fff; padding:0.85rem 2rem; border-radius:10px; text-decoration:none; font-weight:500; font-size:0.95rem; transition:all 0.2s; border:none; cursor:pointer; }
+.btn-primary:hover { background:var(--accent2); transform:translateY(-1px); }
+.btn-ghost { background:transparent; color:var(--muted); padding:0.85rem 2rem; border-radius:10px; text-decoration:none; font-weight:500; font-size:0.95rem; border:1px solid var(--border); transition:all 0.2s; }
+.btn-ghost:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
+
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1px; background:var(--border); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.stat { background:var(--bg); padding:2.5rem 2rem; text-align:center; }
+.stat-num { font-family:'Syne',sans-serif; font-weight:700; font-size:2.2rem; color:var(--text); display:block; margin-bottom:0.3rem; }
+.stat-label { color:var(--muted); font-size:0.85rem; }
+
+section { padding:6rem 2rem; max-width:1100px; margin:0 auto; }
+.section-label { font-size:0.75rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-bottom:1rem; }
+h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:clamp(1.8rem,4vw,2.6rem); letter-spacing:-0.02em; line-height:1.2; margin-bottom:1rem; }
+.section-desc { color:var(--muted); font-size:1.05rem; max-width:560px; line-height:1.7; margin-bottom:3rem; font-weight:300; }
+
+/* ANIM SECTION */
+.anim-section { padding:5rem 2rem; max-width:1100px; margin:0 auto; }
+.anim-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:2.5rem; }
+@media(max-width:900px){ .anim-grid { grid-template-columns:1fr; } }
+
+.anim-card {
+  background:var(--bg2); border:1px solid var(--border); border-radius:16px;
+  padding:1.5rem; cursor:default; position:relative; overflow:hidden;
+  transition:border-color 0.3s,transform 0.3s; min-height:300px;
+}
+.anim-card:hover { border-color:rgba(59,130,246,0.35); transform:translateY(-2px); }
+.anim-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(59,130,246,0.4),transparent); }
+.anim-card-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; color:var(--text); margin-bottom:0.25rem; }
+.anim-card-sub { font-size:0.75rem; color:var(--muted2); margin-bottom:0.75rem; }
+.anim-hint { font-size:0.68rem; color:rgba(59,130,246,0.5); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:1rem; display:flex; align-items:center; gap:5px; }
+.anim-hint::before { content:''; width:14px; height:1px; background:rgba(59,130,246,0.35); }
+
+.anim-steps { display:flex; flex-direction:column; gap:0; position:relative; }
+.anim-steps::before { content:''; position:absolute; left:14px; top:18px; bottom:18px; width:1px; background:rgba(255,255,255,0.05); }
+.anim-step { display:flex; align-items:flex-start; gap:9px; padding-bottom:12px; opacity:0.4; transform:none; transition:opacity 0.45s; }
+.anim-step.vis { opacity:1; }
+.anim-step-icon { width:28px; height:28px; border-radius:7px; background:var(--bg3); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; position:relative; z-index:1; }
+.anim-step-icon.blue { border-color:rgba(59,130,246,0.3); background:rgba(59,130,246,0.08); }
+.anim-step-icon.amber { border-color:rgba(245,158,11,0.3); background:rgba(245,158,11,0.08); }
+.anim-step-icon.green { border-color:rgba(34,197,94,0.3); background:rgba(34,197,94,0.08); }
+.anim-step-text { padding-top:3px; }
+.anim-step-label { font-size:0.77rem; color:var(--text); font-weight:500; line-height:1.3; }
+.anim-step-detail { font-size:0.68rem; color:var(--muted2); margin-top:1px; }
+.dots { display:inline-flex; gap:2px; margin-left:3px; vertical-align:middle; }
+.dots span { width:3px; height:3px; border-radius:50%; background:var(--amber); animation:dot 1.2s ease-in-out infinite; }
+.dots span:nth-child(2){animation-delay:.2s} .dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.anim-result { margin-top:4px; padding:9px 11px; background:var(--bg3); border-radius:8px; border:1px solid var(--border); opacity:0; transform:translateY(6px); transition:opacity 0.5s,transform 0.5s; }
+.anim-result.vis { opacity:1; transform:none; }
+.anim-result-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.anim-result-row:last-child { margin-bottom:0; }
+.anim-result-lbl { font-size:0.65rem; color:var(--muted2); width:56px; flex-shrink:0; }
+.bar-track { flex:1; height:4px; background:rgba(255,255,255,0.05); border-radius:100px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:100px; width:0; transition:width 1.1s cubic-bezier(.22,1,.36,1); }
+.bar-fill.red { background:var(--red); }
+.bar-fill.grn { background:var(--green); }
+.anim-result-val { font-family:'Syne',sans-serif; font-size:0.68rem; font-weight:700; width:44px; text-align:right; }
+.anim-result-val.red { color:var(--red); }
+.anim-result-val.grn { color:var(--green); }
+
+.anim-custom { margin-top:1.25rem; background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.15); border-radius:12px; padding:1rem 1.25rem; display:flex; align-items:flex-start; gap:0.75rem; }
+.anim-custom-icon { font-size:1.1rem; flex-shrink:0; margin-top:2px; }
+.anim-custom-text { font-size:0.85rem; color:var(--muted); line-height:1.6; }
+.anim-custom-text strong { color:var(--accent2); font-weight:500; }
+
+.solutions { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; margin-top:3rem; }
+.sol-card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:2rem; position:relative; overflow:hidden; transition:border-color 0.3s,transform 0.3s; }
+.sol-card:hover { border-color:rgba(59,130,246,0.3); transform:translateY(-3px); }
+.sol-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(59,130,246,0.4),transparent); }
+.sol-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem; font-size:1.5rem; }
+.sol-icon.blue { background:rgba(59,130,246,0.1); }
+.sol-icon.green { background:rgba(34,197,94,0.1); }
+.sol-card h3 { font-family:'Syne',sans-serif; font-weight:700; font-size:1.2rem; margin-bottom:0.75rem; }
+.sol-card p { color:var(--muted); font-size:0.9rem; line-height:1.65; margin-bottom:1.5rem; }
+.feature-list { list-style:none; display:flex; flex-direction:column; gap:0.6rem; }
+.feature-list li { display:flex; align-items:flex-start; gap:0.6rem; font-size:0.88rem; color:var(--muted); }
+.feature-list li::before { content:'→'; color:var(--accent); flex-shrink:0; margin-top:1px; }
+
+.how-wrap { background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:6rem 2rem; }
+.how-inner { max-width:1100px; margin:0 auto; }
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:2rem; margin-top:3rem; counter-reset:step; }
+.step { counter-increment:step; padding-left:1rem; }
+.step::before { content:'0' counter(step); display:block; font-family:'Syne',sans-serif; font-weight:800; font-size:2rem; color:rgba(59,130,246,0.2); margin-bottom:0.75rem; line-height:1; }
+.step h4 { font-family:'Syne',sans-serif; font-weight:600; font-size:1rem; margin-bottom:0.5rem; }
+.step p { color:var(--muted); font-size:0.88rem; line-height:1.6; font-weight:300; }
+
+.who-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-top:2.5rem; }
+.who-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.5rem; text-align:center; }
+.who-card .icon { font-size:1.75rem; margin-bottom:0.75rem; }
+.who-card h4 { font-family:'Syne',sans-serif; font-weight:600; font-size:0.95rem; margin-bottom:0.4rem; }
+.who-card p { color:var(--muted2); font-size:0.82rem; }
+
+.contact-wrap { background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:3.5rem; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+@media(max-width:640px){ .contact-wrap { grid-template-columns:1fr; gap:2rem; padding:2rem; } }
+.contact-item { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; }
+.contact-item-icon { width:36px; height:36px; background:rgba(59,130,246,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+.contact-item-text { font-size:0.9rem; color:var(--muted); }
+.contact-item-text a { color:var(--accent2); text-decoration:none; }
+.contact-form { display:flex; flex-direction:column; gap:1rem; }
+.contact-form input,.contact-form textarea { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:0.85rem 1rem; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.2s; width:100%; resize:none; }
+.contact-form input::placeholder,.contact-form textarea::placeholder { color:var(--muted2); }
+.contact-form input:focus,.contact-form textarea:focus { border-color:rgba(59,130,246,0.5); }
+.contact-form button { background:var(--accent); color:#fff; padding:0.85rem; border-radius:10px; border:none; font-weight:500; font-family:'DM Sans',sans-serif; font-size:0.95rem; cursor:pointer; transition:background 0.2s; }
+.contact-form button:hover { background:var(--accent2); }
+footer { border-top:1px solid var(--border); padding:2rem; text-align:center; color:var(--muted2); font-size:0.82rem; }
+footer a { color:var(--muted); text-decoration:none; }
+.fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.6s,transform 0.6s; }
+.fade-in.visible { opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="#" class="logo">Flow<span>Pilot</span></a>
+    <div class="nav-clock">
+      <svg viewBox="0 0 26 26" id="clockSvg">
+        <circle cx="13" cy="13" r="11.5" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <line x1="13" y1="3.5" x2="13" y2="5.5" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+        <line x1="22.5" y1="13" x2="20.5" y2="13" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+        <line x1="13" y1="22.5" x2="13" y2="20.5" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+        <line x1="3.5" y1="13" x2="5.5" y2="13" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+        <line id="hHand" x1="13" y1="13" x2="13" y2="7.5" stroke="rgba(255,255,255,0.65)" stroke-width="2" stroke-linecap="round"/>
+        <line id="mHand" x1="13" y1="13" x2="13" y2="4.5" stroke="rgba(255,255,255,0.38)" stroke-width="1.5" stroke-linecap="round"/>
+        <line id="sHand" x1="13" y1="13" x2="13" y2="3" stroke="#3b82f6" stroke-width="1" stroke-linecap="round"/>
+        <circle cx="13" cy="13" r="1.5" fill="#3b82f6"/>
+      </svg>
+      <div>
+        <div class="nav-clock-time" id="clockTime">--:--:--</div>
+        <div class="nav-clock-label">every second counts</div>
+      </div>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#animations" data-i18n="nav_demo">Live demos</a></li>
+    <li><a href="#solutions" data-i18n="nav_solutions">Solutions</a></li>
+    <li><a href="#how" data-i18n="nav_how">How it works</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('de')">DE</button>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('pl')">PL</button>
+      <button class="lang-btn" onclick="setLang('sk')">SK</button>
+      <button class="lang-btn" onclick="setLang('ru')">RU</button>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <canvas id="electronCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="badge"><span class="badge-dot"></span><span data-i18n="badge">Available for new projects</span></div>
+    <h1 data-i18n="hero_title">Your business runs.<br><em>We make it fly.</em></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Custom automation systems for logistics and manufacturing companies. Real solutions built from real operational experience.</p>
+    <div class="btn-group">
+      <a href="#contact" class="btn-primary" data-i18n="hero_cta">Get in touch</a>
+      <a href="#animations" class="btn-ghost" data-i18n="hero_more">See live demos</a>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat fade-in"><span class="stat-num">2+</span><span class="stat-label" data-i18n="stat1">Industry-specific systems</span></div>
+  <div class="stat fade-in"><span class="stat-num">80%</span><span class="stat-label" data-i18n="stat2">Reduction in manual work</span></div>
+  <div class="stat fade-in"><span class="stat-num">AI</span><span class="stat-label" data-i18n="stat3">Powered document processing</span></div>
+  <div class="stat fade-in"><span class="stat-num">EU</span><span class="stat-label" data-i18n="stat4">Based &amp; operated</span></div>
+</div>
+
+<div class="anim-section" id="animations">
+  <p class="section-label" data-i18n="anim_label">Live demos</p>
+  <h2 data-i18n="anim_title">See what automation feels like</h2>
+  <p class="section-desc" data-i18n="anim_desc">Hover over each card to watch the process run in real time.</p>
+  <div class="anim-grid">
+
+    <div class="anim-card" onmouseenter="startAnim(1)" onmouseleave="resetAnim(1)">
+      <div class="anim-card-title" data-i18n="a1_title">Order processing</div>
+      <div class="anim-card-sub" data-i18n="a1_sub">Email → driver task in 45 seconds</div>
+      <div class="anim-hint" data-i18n="a1_hint">hover to animate</div>
+      <div class="anim-steps">
+        <div class="anim-step" id="c1s1"><div class="anim-step-icon blue">✉️</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a1_s1l">Email from forwarder</div><div class="anim-step-detail" data-i18n="a1_s1d">PDF order attached</div></div></div>
+        <div class="anim-step" id="c1s2"><div class="anim-step-icon amber">⚙️</div><div class="anim-step-text"><div class="anim-step-label">AI <span data-i18n="a1_s2l">reads &amp; extracts data</span><span class="dots"><span></span><span></span><span></span></span></div><div class="anim-step-detail" data-i18n="a1_s2d">Dates, addresses, rates, terms</div></div></div>
+        <div class="anim-step" id="c1s3"><div class="anim-step-icon blue">📋</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a1_s3l">Driver task created</div><div class="anim-step-detail" data-i18n="a1_s3d">Sent instantly to driver</div></div></div>
+        <div class="anim-step" id="c1s4"><div class="anim-step-icon green">✅</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a1_s4l">Sheet updated, filed</div><div class="anim-step-detail" data-i18n="a1_s4d">Zero manual entry</div></div></div>
+      </div>
+      <div class="anim-result" id="res1">
+        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r1b1"></div></div><div class="anim-result-val red">20 min</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r1b2"></div></div><div class="anim-result-val grn">45 sec</div></div>
+      </div>
+    </div>
+
+    <div class="anim-card" onmouseenter="startAnim(2)" onmouseleave="resetAnim(2)">
+      <div class="anim-card-title" data-i18n="a2_title">Invoice generation</div>
+      <div class="anim-card-sub" data-i18n="a2_sub">Select order → invoice sent automatically</div>
+      <div class="anim-hint" data-i18n="a1_hint">hover to animate</div>
+      <div class="anim-steps">
+        <div class="anim-step" id="c2s1"><div class="anim-step-icon blue">☑️</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a2_s1l">Select completed order</div><div class="anim-step-detail" data-i18n="a2_s1d">One click in dashboard</div></div></div>
+        <div class="anim-step" id="c2s2"><div class="anim-step-icon amber">⚙️</div><div class="anim-step-text"><div class="anim-step-label">AI <span data-i18n="a2_s2l">generates invoice PDF</span><span class="dots"><span></span><span></span><span></span></span></div><div class="anim-step-detail" data-i18n="a2_s2d">All order data prefilled</div></div></div>
+        <div class="anim-step" id="c2s3"><div class="anim-step-icon blue">📧</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a2_s3l">Sent to customer</div><div class="anim-step-detail" data-i18n="a2_s3d">Email with PDF attachment</div></div></div>
+        <div class="anim-step" id="c2s4"><div class="anim-step-icon green">💰</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a2_s4l">Payment tracking started</div><div class="anim-step-detail" data-i18n="a2_s4d">Due date auto-calculated</div></div></div>
+      </div>
+      <div class="anim-result" id="res2">
+        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r2b1"></div></div><div class="anim-result-val red">15 min</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r2b2"></div></div><div class="anim-result-val grn">30 sec</div></div>
+      </div>
+    </div>
+
+    <div class="anim-card" onmouseenter="startAnim(3)" onmouseleave="resetAnim(3)">
+      <div class="anim-card-title" data-i18n="a3_title">Sending originals</div>
+      <div class="anim-card-sub" data-i18n="a3_sub">CMR + invoices → envelopes printed</div>
+      <div class="anim-hint" data-i18n="a1_hint">hover to animate</div>
+      <div class="anim-steps">
+        <div class="anim-step" id="c3s1"><div class="anim-step-icon blue">☑️</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a3_s1l">Mark orders for dispatch</div><div class="anim-step-detail" data-i18n="a3_s1d">Select completed deliveries</div></div></div>
+        <div class="anim-step" id="c3s2"><div class="anim-step-icon amber">⚙️</div><div class="anim-step-text"><div class="anim-step-label">System <span data-i18n="a3_s2l">collects documents</span><span class="dots"><span></span><span></span><span></span></span></div><div class="anim-step-detail" data-i18n="a3_s2d">CMR + invoices per envelope</div></div></div>
+        <div class="anim-step" id="c3s3"><div class="anim-step-icon blue">🏛️</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a3_s3l">Registered via postal API</div><div class="anim-step-detail" data-i18n="a3_s3d">Address labels sent to printer</div></div></div>
+        <div class="anim-step" id="c3s4"><div class="anim-step-icon green">📬</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a3_s4l">Insert &amp; drop at post office</div><div class="anim-step-detail" data-i18n="a3_s4d">No typing, no mistakes</div></div></div>
+      </div>
+      <div class="anim-result" id="res3">
+        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r3b1"></div></div><div class="anim-result-val red">40 min</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r3b2"></div></div><div class="anim-result-val grn">3 min</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="anim-custom">
+    <div class="anim-custom-icon">🔧</div>
+    <div class="anim-custom-text" data-i18n="anim_custom"><strong>These are just examples.</strong> Every system we build starts from your specific challenge. If your workflow isn't shown here — describe it and we'll build exactly what you need.</div>
+  </div>
+</div>
+  <p class="section-label" data-i18n="sol_label">Solutions</p>
+  <h2 data-i18n="sol_title">Built for your industry,<br>not the average one.</h2>
+  <p class="section-desc" data-i18n="sol_desc">We don't sell generic software. Every system is designed around your actual workflow.</p>
+  <div class="solutions">
+    <div class="sol-card fade-in">
+      <div class="sol-icon blue">🚛</div>
+      <h3 data-i18n="log_title">Logistics Automation</h3>
+      <p data-i18n="log_desc">Full operational system for international freight. From order decision to final payment — automated.</p>
+      <ul class="feature-list">
+        <li data-i18n="log_f1">Instant freight analysis — decision in seconds</li>
+        <li data-i18n="log_f2">AI reads forwarder emails, creates driver tasks automatically</li>
+        <li data-i18n="log_f3">Real-time truck tracking via Telegram</li>
+        <li data-i18n="log_f4">Automated postal registration &amp; envelope printing for CMR originals</li>
+        <li data-i18n="log_f5">Full financial dashboard: factoring, receivables, payment tracking</li>
+        <li data-i18n="log_f6">Company rating system with instant risk assessment</li>
+      </ul>
+    </div>
+    <div class="sol-card fade-in">
+      <div class="sol-icon green">🏭</div>
+      <h3 data-i18n="mes_title">Manufacturing Automation</h3>
+      <p data-i18n="mes_desc">MES for production companies. Orders, processes, materials and output — from one interface.</p>
+      <ul class="feature-list">
+        <li data-i18n="mes_f1">Production order management with full process chains</li>
+        <li data-i18n="mes_f2">Automatic PDF technical order generation</li>
+        <li data-i18n="mes_f3">Visual cargo &amp; load planning tools</li>
+        <li data-i18n="mes_f4">Material and equipment tracking</li>
+        <li data-i18n="mes_f5">Sketch and template management per product type</li>
+        <li data-i18n="mes_f6">Access control and role-based permissions</li>
+      </ul>
+    </div>
+    <div class="sol-card fade-in">
+      <div class="sol-icon blue">⚙️</div>
+      <h3 data-i18n="cust_title">Custom Automation</h3>
+      <p data-i18n="cust_desc">Got a repetitive process eating your team's time? We find the weak points and build the system that removes them.</p>
+      <ul class="feature-list">
+        <li data-i18n="cust_f1">Cold email outreach with AI personalization</li>
+        <li data-i18n="cust_f2">Google Sheets &amp; Drive automation</li>
+        <li data-i18n="cust_f3">Telegram bots for internal operations</li>
+        <li data-i18n="cust_f4">Document processing via AI API</li>
+        <li data-i18n="cust_f5">Any workflow costing more than an hour a day</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="how-wrap" id="how">
+  <div class="how-inner">
+    <p class="section-label" data-i18n="how_label">Process</p>
+    <h2 data-i18n="how_title">How we work together</h2>
+    <p class="section-desc" data-i18n="how_desc">No long contracts. No enterprise nonsense. Just a clear process from first call to working system.</p>
+    <div class="steps">
+      <div class="step fade-in"><h4 data-i18n="step1_title">Discovery call</h4><p data-i18n="step1_desc">30 minutes. You explain your workflow, we identify what costs you the most.</p></div>
+      <div class="step fade-in"><h4 data-i18n="step2_title">System design</h4><p data-i18n="step2_desc">We map out the solution, agree on scope and price. No surprises.</p></div>
+      <div class="step fade-in"><h4 data-i18n="step3_title">Build &amp; test</h4><p data-i18n="step3_desc">We build the system, you test it with real data. Adjustments are part of the process.</p></div>
+      <div class="step fade-in"><h4 data-i18n="step4_title">Deploy &amp; support</h4><p data-i18n="step4_desc">System goes live. We stay in touch and evolve it as your business grows.</p></div>
+    </div>
+  </div>
+</div>
+
+<section id="who">
+  <p class="section-label" data-i18n="who_label">Who we help</p>
+  <h2 data-i18n="who_title">Small teams doing serious work</h2>
+  <p class="section-desc" data-i18n="who_desc">We work best with companies of 1–50 people who are growing fast but can't afford enterprise software prices.</p>
+  <div class="who-grid">
+    <div class="who-card fade-in"><div class="icon">🚚</div><h4 data-i18n="who1_title">Freight forwarders</h4><p data-i18n="who1_desc">International transport, 1–20 trucks</p></div>
+    <div class="who-card fade-in"><div class="icon">🏭</div><h4 data-i18n="who2_title">Manufacturers</h4><p data-i18n="who2_desc">Small production facilities</p></div>
+    <div class="who-card fade-in"><div class="icon">📦</div><h4 data-i18n="who3_title">Logistics operators</h4><p data-i18n="who3_desc">Warehousing &amp; distribution</p></div>
+    <div class="who-card fade-in"><div class="icon">💼</div><h4 data-i18n="who4_title">Any business</h4><p data-i18n="who4_desc">With repetitive processes to automate</p></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-wrap fade-in">
+    <div>
+      <p class="section-label" data-i18n="con_label">Contact</p>
+      <h2 data-i18n="con_title">Let's talk about your workflow</h2>
+      <p style="color:var(--muted);font-weight:300;margin-bottom:2rem;" data-i18n="con_desc">Describe your biggest operational headache. We'll tell you if and how we can fix it.</p>
+      <div class="contact-item"><div class="contact-item-icon">✉️</div><div class="contact-item-text"><a href="mailto:flowpilot@flowpilot.sk">flowpilot@flowpilot.sk</a></div></div>
+      <div class="contact-item"><div class="contact-item-icon">💬</div><div class="contact-item-text"><a href="https://wa.me/421915486560">WhatsApp: +421 915 486 560</a></div></div>
+      <div class="contact-item"><div class="contact-item-icon">📞</div><div class="contact-item-text"><a href="tel:+421915486560">+421 915 486 560</a></div></div>
+      <div class="contact-item"><div class="contact-item-icon">💬</div><div class="contact-item-text" data-i18n="con_telegram">Telegram — ask for contact</div></div>
+      <div class="contact-item"><div class="contact-item-icon">🌍</div><div class="contact-item-text" data-i18n="con_location">Slovakia · EU · Remote worldwide</div></div>
+    </div>
+    <form class="contact-form" onsubmit="handleForm(event)">
+      <input type="text" data-placeholder-i18n="form_name" placeholder="Your name" required>
+      <input type="email" data-placeholder-i18n="form_email" placeholder="Email address" required>
+      <input type="text" data-placeholder-i18n="form_company" placeholder="Company / industry">
+      <textarea rows="4" data-placeholder-i18n="form_msg" placeholder="Describe what you want to automate..." required></textarea>
+      <button type="submit" data-i18n="form_send">Send message →</button>
+    </form>
+  </div>
+</section>
+
+<footer><p>© 2026 FlowPilot · EHOT · Slovakia · <a href="mailto:flowpilot@flowpilot.sk">flowpilot@flowpilot.sk</a> · <a href="tel:+421915486560">+421 915 486 560</a></p></footer>
+
+<script>
+function updateClock(){
+  const now=new Date(),h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
+  const pad=n=>String(n).padStart(2,'0');
+  document.getElementById('clockTime').textContent=`${pad(h)}:${pad(m)}:${pad(s)}`;
+  const cx=13,cy=13;
+  const hDeg=(h%12)/12*360+m/60*30,mDeg=m/60*360+s/60*6,sDeg=s/60*360;
+  function rl(id,deg,len){
+    const el=document.getElementById(id);if(!el)return;
+    const r=(deg-90)*Math.PI/180;
+    el.setAttribute('x2',cx+Math.cos(r)*len);el.setAttribute('y2',cy+Math.sin(r)*len);
+  }
+  rl('hHand',hDeg,5.5);rl('mHand',mDeg,8.5);rl('sHand',sDeg,10);
+}
+setInterval(updateClock,1000);updateClock();
+
+const T={};
+function startAnim(n){
+  resetAnim(n);
+  [0,1400,2600,3600].forEach((d,i)=>{
+    T[`${n}_${i}`]=setTimeout(()=>{
+      const el=document.getElementById(`c${n}s${i+1}`);if(el)el.classList.add('vis');
+    },d);
+  });
+  T[`${n}_r`]=setTimeout(()=>{
+    const r=document.getElementById(`res${n}`);if(!r)return;
+    r.classList.add('vis');
+    setTimeout(()=>{
+      const b1=document.getElementById(`r${n}b1`),b2=document.getElementById(`r${n}b2`);
+      if(b1)b1.style.width='100%';
+      if(b2)b2.style.width=n===1?'3.75%':n===2?'3.33%':'7.5%';
+    },150);
+  },4400);
+}
+function resetAnim(n){
+  Object.keys(T).filter(k=>k.startsWith(`${n}_`)).forEach(k=>{clearTimeout(T[k]);delete T[k];});
+  for(let i=1;i<=4;i++){const el=document.getElementById(`c${n}s${i}`);if(el)el.classList.remove('vis');}
+  const r=document.getElementById(`res${n}`);
+  if(r){r.classList.remove('vis');
+    ['b1','b2'].forEach(b=>{const el=document.getElementById(`r${n}${b}`);if(el)el.style.width='0';});
+  }
+}
+
+new IntersectionObserver(entries=>entries.forEach((e,i)=>{
+  if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);
+}),{threshold:0.1}).observe && document.querySelectorAll('.fade-in').forEach(el=>
+  new IntersectionObserver(([e])=>{if(e.isIntersecting)e.target.classList.add('visible');},{threshold:0.1}).observe(el)
+);
+
+function handleForm(e){
+  e.preventDefault();const btn=e.target.querySelector('button');
+  btn.textContent='✓ Sent!';btn.style.background='#22c55e';
+  setTimeout(()=>{e.target.reset();btn.textContent=translations[currentLang].form_send;btn.style.background='';},3000);
+}
+
+/* ── ELECTRONS ── */
+(function(){
+  const canvas=document.getElementById('electronCanvas');
+  const ctx=canvas.getContext('2d');
+  const GRID=60,COUNT=18;
+  function resize(){
+    canvas.width=canvas.offsetWidth;
+    canvas.height=canvas.offsetHeight;
+  }
+  resize();window.addEventListener('resize',resize);
+  const COLORS=['rgba(96,165,250,','rgba(56,189,248,','rgba(147,197,253,','rgba(59,130,246,'];
+  function rnd(a,b){return a+Math.random()*(b-a);}
+  function mkElectron(){
+    const w=canvas.width,h=canvas.height;
+    const horiz=Math.random()>0.5;
+    const dir=Math.random()>0.5?1:-1;
+    const cols=Math.floor(w/GRID),rows=Math.floor(h/GRID);
+    let x,y,vx=0,vy=0;
+    if(horiz){
+      y=Math.floor(Math.random()*rows)*GRID;
+      x=dir>0?-20:w+20;
+      vx=dir*rnd(35,70);
+    } else {
+      x=Math.floor(Math.random()*cols)*GRID;
+      y=dir>0?-20:h+20;
+      vy=dir*rnd(35,70);
+    }
+    return{x,y,vx,vy,len:rnd(35,75),op:rnd(0.25,0.55),c:COLORS[Math.floor(Math.random()*COLORS.length)]};
+  }
+  const electrons=Array.from({length:COUNT},()=>{
+    const e=mkElectron();
+    const w=canvas.width,h=canvas.height;
+    if(e.vx!==0) e.x=rnd(0,w);
+    else e.y=rnd(0,h);
+    return e;
+  });
+  let last=0;
+  function draw(ts){
+    const dt=Math.min((ts-last)/1000,0.05);last=ts;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const w=canvas.width,h=canvas.height;
+    electrons.forEach((e,i)=>{
+      e.x+=e.vx*dt;e.y+=e.vy*dt;
+      const dead=e.x<-e.len-5||e.x>w+e.len+5||e.y<-e.len-5||e.y>h+e.len+5;
+      if(dead){electrons[i]=mkElectron();return;}
+      const horiz=e.vx!==0;
+      const px=horiz?e.x:Math.round(e.x);
+      const py=horiz?Math.round(e.y):e.y;
+      const tx=horiz?px-e.vx/Math.abs(e.vx)*e.len:px;
+      const ty=horiz?py:py-e.vy/Math.abs(e.vy)*e.len;
+      const g=ctx.createLinearGradient(tx,ty,px,py);
+      g.addColorStop(0,e.c+'0)');
+      g.addColorStop(1,e.c+e.op+')');
+      ctx.beginPath();ctx.strokeStyle=g;ctx.lineWidth=1.5;
+      ctx.moveTo(tx,ty);ctx.lineTo(px,py);ctx.stroke();
+      ctx.beginPath();
+      ctx.fillStyle=e.c+Math.min(e.op+0.2,0.9)+')';
+      ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+const translations={
+  en:{nav_demo:"Live demos",nav_solutions:"Solutions",nav_how:"How it works",nav_contact:"Contact",badge:"Available for new projects",hero_title:"Your business runs.<br><em>We make it fly.</em>",hero_sub:"Custom automation systems for logistics and manufacturing companies. Real solutions built from real operational experience.",hero_cta:"Get in touch",hero_more:"See live demos",stat1:"Industry-specific systems",stat2:"Reduction in manual work",stat3:"AI-powered document processing",stat4:"Based & operated",anim_label:"Live demos",anim_title:"See what automation feels like",anim_desc:"Hover over each card to watch the process run in real time.",a1_title:"Order processing",a1_sub:"Email → driver task in 45 seconds",a1_hint:"hover to animate",a1_s1l:"Email from forwarder",a1_s1d:"PDF order attached",a1_s2l:"reads & extracts data",a1_s2d:"Dates, addresses, rates, terms",a1_s3l:"Driver task created",a1_s3d:"Sent instantly to driver",a1_s4l:"Sheet updated, filed",a1_s4d:"Zero manual entry",a2_title:"Invoice generation",a2_sub:"Select order → invoice sent automatically",a2_s1l:"Select completed order",a2_s1d:"One click in dashboard",a2_s2l:"generates invoice PDF",a2_s2d:"All order data prefilled",a2_s3l:"Sent to customer",a2_s3d:"Email with PDF attachment",a2_s4l:"Payment tracking started",a2_s4d:"Due date auto-calculated",a3_title:"Sending originals",a3_sub:"CMR + invoices → envelopes printed",a3_s1l:"Mark orders for dispatch",a3_s1d:"Select completed deliveries",a3_s2l:"collects documents",a3_s2d:"CMR + invoices per envelope",a3_s3l:"Registered via postal API",a3_s3d:"Address labels sent to printer",a3_s4l:"Insert & drop at post office",a3_s4d:"No typing, no mistakes",without:"Without",sol_label:"Solutions",sol_title:"Built for your industry,<br>not the average one.",sol_desc:"We don't sell generic software. Every system is designed around your actual workflow.",log_title:"Logistics Automation",log_desc:"Full operational system for international freight. From order decision to final payment — automated.",log_f1:"Instant freight analysis — decision in seconds",log_f2:"AI reads forwarder emails, creates driver tasks automatically",log_f3:"Real-time truck tracking via Telegram",log_f4:"Automated postal registration & envelope printing for CMR originals",log_f5:"Full financial dashboard: factoring, receivables, payment tracking",log_f6:"Company rating system with instant risk assessment",mes_title:"Manufacturing Automation",mes_desc:"MES for production companies. Orders, processes, materials and output — from one interface.",mes_f1:"Production order management with full process chains",mes_f2:"Automatic PDF technical order generation",mes_f3:"Visual cargo & load planning tools",mes_f4:"Material and equipment tracking",mes_f5:"Sketch and template management per product type",mes_f6:"Access control and role-based permissions",cust_title:"Custom Automation",cust_desc:"Got a repetitive process eating your team's time? We find the weak points and build the system that removes them.",cust_f1:"Cold email outreach with AI personalization",cust_f2:"Google Sheets & Drive automation",cust_f3:"Telegram bots for internal operations",cust_f4:"Document processing via AI API",cust_f5:"Any workflow costing more than an hour a day",how_label:"Process",how_title:"How we work together",how_desc:"No long contracts. No enterprise nonsense. Just a clear process from first call to working system.",step1_title:"Discovery call",step1_desc:"30 minutes. You explain your workflow, we identify what costs you the most.",step2_title:"System design",step2_desc:"We map out the solution, agree on scope and price. No surprises.",step3_title:"Build & test",step3_desc:"We build the system, you test it with real data. Adjustments are part of the process.",step4_title:"Deploy & support",step4_desc:"System goes live. We stay in touch and evolve it as your business grows.",who_label:"Who we help",who_title:"Small teams doing serious work",who_desc:"We work best with companies of 1–50 people who are growing fast but can't afford enterprise software prices.",who1_title:"Freight forwarders",who1_desc:"International transport, 1–20 trucks",who2_title:"Manufacturers",who2_desc:"Small production facilities",who3_title:"Logistics operators",who3_desc:"Warehousing & distribution",who4_title:"Any business",who4_desc:"With repetitive processes to automate",con_label:"Contact",con_title:"Let's talk about your workflow",con_desc:"Describe your biggest operational headache. We'll tell you if and how we can fix it.",con_telegram:"Telegram — ask for contact",con_location:"Slovakia · EU · Remote worldwide",form_name:"Your name",form_email:"Email address",form_company:"Company / industry",form_msg:"Describe what you want to automate...",form_send:"Send message →",anim_custom:"<strong>These are just examples.</strong> Every system we build starts from your specific challenge. If your workflow isn't shown here — describe it and we'll build exactly what you need."},
+  sk:{nav_demo:"Ukážky",nav_solutions:"Riešenia",nav_how:"Ako pracujeme",nav_contact:"Kontakt",badge:"Otvorení pre nové projekty",hero_title:"Váš biznis beží.<br><em>My ho necháme letieť.</em>",hero_sub:"Systémy automatizácie na mieru pre logistické a výrobné firmy. Riešenia postavené na reálnej prevádzkovej skúsenosti.",hero_cta:"Kontaktujte nás",hero_more:"Pozrite ukážky",stat1:"Odvetvové systémy",stat2:"Menej manuálnej práce",stat3:"Spracovanie dokumentov cez AI",stat4:"Sídlo v EÚ",anim_label:"Ukážky naživo",anim_title:"Pozrite, ako vyzerá automatizácia",anim_desc:"Nabehnutím myšou na kartu spustíte proces.",a1_title:"Spracovanie objednávky",a1_sub:"Email → úloha vodiča za 45 sekúnd",a1_hint:"nabehni myšou",a1_s1l:"Email od špeditéra",a1_s1d:"Priložená PDF objednávka",a1_s2l:"číta a extrahuje dáta",a1_s2d:"Dátumy, adresy, sadzby, podmienky",a1_s3l:"Úloha vodiča vytvorená",a1_s3d:"Okamžite odoslaná vodičovi",a1_s4l:"Tabuľka aktualizovaná",a1_s4d:"Nulové manuálne zadávanie",a2_title:"Vystavenie faktúry",a2_sub:"Vyber objednávku → faktúra odoslaná",a2_s1l:"Vyber dokončenú objednávku",a2_s1d:"Jeden klik v dashboarde",a2_s2l:"generuje faktúru PDF",a2_s2d:"Všetky dáta objednávky predvyplnené",a2_s3l:"Odoslaná zákazníkovi",a2_s3d:"Email s prílohou PDF",a2_s4l:"Sledovanie platby spustené",a2_s4d:"Dátum splatnosti automaticky",a3_title:"Odosielanie originálov",a3_sub:"CMR + faktúry → vytlačené obálky",a3_s1l:"Označ objednávky na odoslanie",a3_s1d:"Vyber dokončené prepravy",a3_s2l:"zbiera dokumenty",a3_s2d:"CMR + faktúry na obálku",a3_s3l:"Registrácia cez API pošty",a3_s3d:"Adresy odoslané na tlačiareň",a3_s4l:"Vlož do obálok, odnes na poštu",a3_s4d:"Bez písania, bez chýb",without:"Bez systému",sol_label:"Riešenia",sol_title:"Postavené pre váš sektor,<br>nie pre priemerný.",sol_desc:"Nepredávame generický softvér. Každý systém je navrhnutý okolo vášho skutočného pracovného toku.",log_title:"Automatizácia logistiky",log_desc:"Kompletný operačný systém pre medzinárodnú kamiónovú dopravu. Od zákazky po záverečnú platbu — automaticky.",log_f1:"Okamžitá analýza frachtu — rozhodnutie za sekundy",log_f2:"AI číta e-maily od špeditérov, automaticky vytvára úlohy pre vodičov",log_f3:"Sledovanie kamiónov v reálnom čase cez Telegram",log_f4:"Automatická registrácia zásielky a tlač obálok pre CMR originály",log_f5:"Finančný prehľad: faktoring, pohľadávky, sledovanie platieb",log_f6:"Systém hodnotenia firiem s okamžitým vyhodnotením rizika",mes_title:"Automatizácia výroby",mes_desc:"MES pre výrobné firmy. Zákazky, procesy, materiály a výstupy — v jednom rozhraní.",mes_f1:"Správa výrobných zákaziek s procesovými reťazcami",mes_f2:"Automatické generovanie technických PDF príkazov",mes_f3:"Vizuálne nástroje na plánovanie nákladu",mes_f4:"Evidencia materiálov a zariadení",mes_f5:"Správa náčrtov a šablón podľa typu výrobku",mes_f6:"Kontrola prístupu a oprávnenia podľa rolí",cust_title:"Automatizácia na mieru",cust_desc:"Máte opakujúci sa proces, ktorý kradne čas vášmu tímu? Nájdeme slabé miesta a postavíme systém, ktorý ich odstráni.",cust_f1:"Studené e-mailové kampane s AI personalizáciou",cust_f2:"Automatizácia Google Sheets a Drive",cust_f3:"Telegram boty pre internú prevádzku",cust_f4:"Spracovanie dokumentov cez AI API",cust_f5:"Akýkoľvek proces, ktorý vás stojí viac ako hodinu denne",how_label:"Postup",how_title:"Ako spolu pracujeme",how_desc:"Žiadne dlhé zmluvy. Žiadna byrokracia. Jasný postup od prvého hovoru po funkčný systém.",step1_title:"Úvodný hovor",step1_desc:"30 minút. Opíšete tok práce, my nájdeme čo vás stojí najviac.",step2_title:"Návrh systému",step2_desc:"Zmapujeme riešenie, dohodneme sa na rozsahu a cene. Žiadne prekvapenia.",step3_title:"Vývoj a testovanie",step3_desc:"Postavíme systém, vy ho otestujete na reálnych dátach.",step4_title:"Nasadenie a podpora",step4_desc:"Systém ide do prevádzky. Zostávame v kontakte a rozvíjame ho spolu s vašou firmou.",who_label:"Komu pomáhame",who_title:"Malé tímy, ktoré robia veľkú prácu",who_desc:"Pracujeme najlepšie s firmami od 1 do 50 ľudí, ktoré rastú, ale nemôžu si dovoliť enterprise softvér.",who1_title:"Špeditéri a dopravcovia",who1_desc:"Medzinárodná preprava, 1–20 kamiónov",who2_title:"Výrobné firmy",who2_desc:"Malé výrobné prevádzky",who3_title:"Logistickí operátori",who3_desc:"Sklady a distribúcia",who4_title:"Akýkoľvek biznis",who4_desc:"S opakujúcimi sa procesmi na automatizáciu",con_label:"Kontakt",con_title:"Porozprávajme sa o vašom pracovnom toku",con_desc:"Opíšte váš najväčší prevádzkový problém. Povieme vám, či a ako ho dokážeme vyriešiť.",con_telegram:"Telegram — opýtajte sa na kontakt",con_location:"Slovensko · EÚ · Remote celosvetovo",form_name:"Vaše meno",form_email:"E-mailová adresa",form_company:"Firma / odvetvie",form_msg:"Opíšte, čo chcete automatizovať...",form_send:"Odoslať správu →",anim_custom:"<strong>Toto sú len ukážky.</strong> Každý systém stavíme od vašej konkrétnej výzvy. Ak váš proces tu nie je — opíšte ho a postavíme presne to, čo potrebujete."},
+  ru:{nav_demo:"Демо",nav_solutions:"Решения",nav_how:"Как работаем",nav_contact:"Контакт",badge:"Открыты для новых проектов",hero_title:"Ваш бизнес работает.<br><em>Мы заставим его летать.</em>",hero_sub:"Системы автоматизации под ключ для логистических и производственных компаний. Реальные решения из реального опыта.",hero_cta:"Написать нам",hero_more:"Смотреть демо",stat1:"Отраслевых системы",stat2:"Меньше ручного труда",stat3:"Обработка документов AI",stat4:"Базируемся в ЕС",anim_label:"Демо",anim_title:"Посмотрите как работает автоматизация",anim_desc:"Наведите курсор на карточку чтобы запустить процесс.",a1_title:"Обработка заказа",a1_sub:"Email → задание водителю за 45 секунд",a1_hint:"наведите курсор",a1_s1l:"Email от экспедитора",a1_s1d:"Прикреплён PDF ордер",a1_s2l:"читает и извлекает данные",a1_s2d:"Даты, адреса, ставки, условия",a1_s3l:"Задание водителю создано",a1_s3d:"Отправлено мгновенно",a1_s4l:"Таблица обновлена",a1_s4d:"Ноль ручного ввода",a2_title:"Выставление счёта",a2_sub:"Выбор заказа → счёт отправлен автоматически",a2_s1l:"Выбрать завершённый заказ",a2_s1d:"Один клик в дашборде",a2_s2l:"генерирует PDF счёт",a2_s2d:"Все данные заказа заполнены",a2_s3l:"Отправлено клиенту",a2_s3d:"Email с PDF вложением",a2_s4l:"Контроль оплаты запущен",a2_s4d:"Срок оплаты рассчитан автоматически",a3_title:"Отправка оригиналов",a3_sub:"CMR + счета → конверты напечатаны",a3_s1l:"Отметить заказы к отправке",a3_s1d:"Выбрать завершённые перевозки",a3_s2l:"собирает документы",a3_s2d:"CMR + счета на конверт",a3_s3l:"Регистрация через API почты",a3_s3d:"Адреса отправлены на принтер",a3_s4l:"Вложить и сдать на почту",a3_s4d:"Без печати, без ошибок",without:"Без системы",sol_label:"Решения",sol_title:"Создано для вашей отрасли,<br>а не для средней.",sol_desc:"Мы не продаём универсальный софт. Каждая система строится под ваш реальный рабочий процесс.",log_title:"Автоматизация логистики",log_desc:"Полная операционная система для международных грузоперевозок. От решения по заявке до финального платежа — автоматически.",log_f1:"Мгновенный анализ груза — решение за секунды",log_f2:"AI читает письма экспедиторов, автоматически создаёт задания водителям",log_f3:"Отслеживание грузовиков в реальном времени через Telegram",log_f4:"Автоматическая регистрация на почте и печать адресов для оригиналов CMR",log_f5:"Финансовый дашборд: факторинг, дебиторка, контроль платежей",log_f6:"Система рейтинга компаний с мгновенной оценкой риска",mes_title:"Автоматизация производства",mes_desc:"MES для производственных компаний. Заказы, процессы, материалы — в одном интерфейсе.",mes_f1:"Управление производственными заказами с цепочками процессов",mes_f2:"Автоматическая генерация технических PDF-заданий",mes_f3:"Визуальное планирование загрузки кузова",mes_f4:"Учёт материалов и оборудования",mes_f5:"Управление эскизами и шаблонами по типам изделий",mes_f6:"Контроль доступа и ролевые права",cust_title:"Автоматизация под заказ",cust_desc:"Есть повторяющийся процесс, который съедает время вашей команды? Мы найдём слабые места и устраним их.",cust_f1:"Холодные рассылки с персонализацией через AI",cust_f2:"Автоматизация Google Sheets и Drive",cust_f3:"Telegram-боты для внутренних операций",cust_f4:"Обработка документов через AI API",cust_f5:"Любой процесс, который стоит вам больше часа в день",how_label:"Процесс",how_title:"Как мы работаем вместе",how_desc:"Никаких длинных контрактов. Никакой бюрократии. Чёткий путь от первого звонка до работающей системы.",step1_title:"Первый звонок",step1_desc:"30 минут. Вы описываете рабочий процесс, мы находим что стоит вам больше всего.",step2_title:"Проектирование",step2_desc:"Прописываем решение, согласуем объём и цену. Без сюрпризов.",step3_title:"Разработка и тест",step3_desc:"Строим систему, вы тестируете на реальных данных.",step4_title:"Запуск и поддержка",step4_desc:"Система запускается. Остаёмся на связи и развиваем её вместе с вашим бизнесом.",who_label:"Кому помогаем",who_title:"Небольшие команды — серьёзный бизнес",who_desc:"Лучше всего работаем с компаниями от 1 до 50 человек, которые растут, но не могут позволить enterprise-цены.",who1_title:"Экспедиторы и перевозчики",who1_desc:"Международные перевозки, 1–20 фур",who2_title:"Производства",who2_desc:"Небольшие производственные предприятия",who3_title:"Логистические операторы",who3_desc:"Склады и дистрибуция",who4_title:"Любой бизнес",who4_desc:"С повторяющимися процессами для автоматизации",con_label:"Контакт",con_title:"Поговорим о вашем рабочем процессе",con_desc:"Опишите вашу главную операционную проблему. Скажем, можем ли и как её решить.",con_telegram:"Telegram — спросите контакт",con_location:"Словакия · ЕС · Remote по всему миру",form_name:"Ваше имя",form_email:"Email адрес",form_company:"Компания / отрасль",form_msg:"Опишите что хотите автоматизировать...",form_send:"Отправить сообщение →",anim_custom:"<strong>Это лишь примеры.</strong> Каждую систему мы строим от вашей конкретной задачи. Если вашего процесса здесь нет — опишите его и мы построим именно то, что нужно."},
+  pl:{nav_demo:"Demo",nav_solutions:"Rozwiązania",nav_how:"Jak działamy",nav_contact:"Kontakt",badge:"Otwarci na nowe projekty",hero_title:"Twój biznes działa.<br><em>My sprawimy, że poleci.</em>",hero_sub:"Systemy automatyzacji na miarę dla firm logistycznych i produkcyjnych. Prawdziwe rozwiązania oparte na prawdziwym doświadczeniu operacyjnym.",hero_cta:"Skontaktuj się",hero_more:"Zobacz demo",stat1:"Systemy branżowe",stat2:"Mniej pracy ręcznej",stat3:"Przetwarzanie dokumentów AI",stat4:"Baza w UE",anim_label:"Demo na żywo",anim_title:"Zobacz jak wygląda automatyzacja",anim_desc:"Najedź kursorem na kartę aby uruchomić proces.",a1_title:"Przetwarzanie zlecenia",a1_sub:"Email → zadanie kierowcy w 45 sekund",a1_hint:"najedź kursorem",a1_s1l:"Email od spedytora",a1_s1d:"Załączony PDF ze zleceniem",a1_s2l:"czyta i ekstrahuje dane",a1_s2d:"Daty, adresy, stawki, warunki",a1_s3l:"Zadanie kierowcy utworzone",a1_s3d:"Wysłane natychmiast do kierowcy",a1_s4l:"Arkusz zaktualizowany",a1_s4d:"Zero ręcznego wprowadzania",a2_title:"Generowanie faktur",a2_sub:"Wybierz zlecenie → faktura wysłana",a2_s1l:"Wybierz ukończone zlecenie",a2_s1d:"Jedno kliknięcie w panelu",a2_s2l:"generuje fakturę PDF",a2_s2d:"Wszystkie dane zlecenia uzupełnione",a2_s3l:"Wysłana do klienta",a2_s3d:"Email z załącznikiem PDF",a2_s4l:"Śledzenie płatności uruchomione",a2_s4d:"Termin płatności obliczony auto",a3_title:"Wysyłka oryginałów",a3_sub:"CMR + faktury → wydrukowane koperty",a3_s1l:"Oznacz zlecenia do wysyłki",a3_s1d:"Wybierz ukończone przewozy",a3_s2l:"zbiera dokumenty",a3_s2d:"CMR + faktury na kopertę",a3_s3l:"Rejestracja przez API poczty",a3_s3d:"Adresy wysłane do drukarki",a3_s4l:"Włóż do kopert, odnieś na pocztę",a3_s4d:"Bez pisania, bez błędów",without:"Bez systemu",sol_label:"Rozwiązania",sol_title:"Stworzone dla Twojej branży,<br>nie dla przeciętnej.",sol_desc:"Nie sprzedajemy gotowego oprogramowania. Każdy system projektujemy pod Twój rzeczywisty przepływ pracy.",log_title:"Automatyzacja logistyki",log_desc:"Kompletny system operacyjny dla firm transportu międzynarodowego. Od decyzji o zleceniu do ostatniej płatności — automatycznie.",log_f1:"Błyskawiczna analiza frachtu — decyzja w sekundy",log_f2:"AI czyta e-maile od spedytorów, automatycznie tworzy zadania dla kierowców",log_f3:"Śledzenie ciężarówek w czasie rzeczywistym przez Telegram",log_f4:"Automatyczna rejestracja na poczcie i druk adresów na koperty CMR",log_f5:"Pełny dashboard finansowy: faktoring, należności, kontrola płatności",log_f6:"System oceny firm z natychmiastową oceną ryzyka",mes_title:"Automatyzacja produkcji",mes_desc:"MES dla firm wytwórczych. Zlecenia, procesy, materiały i wyniki — w jednym interfejsie.",mes_f1:"Zarządzanie zleceniami produkcyjnymi z pełnymi łańcuchami procesów",mes_f2:"Automatyczne generowanie technicznych PDF zleceń",mes_f3:"Wizualne narzędzia do planowania załadunku",mes_f4:"Śledzenie materiałów i sprzętu",mes_f5:"Zarządzanie szkicami i szablonami według typu produktu",mes_f6:"Kontrola dostępu i uprawnienia oparte na rolach",cust_title:"Automatyzacja na miarę",cust_desc:"Masz powtarzający się proces, który pożera czas Twojego zespołu? Znajdziemy słabe punkty i zbudujemy system, który je wyeliminuje.",cust_f1:"Zimne kampanie e-mailowe z personalizacją AI",cust_f2:"Automatyzacja Google Sheets i Drive",cust_f3:"Boty Telegram do operacji wewnętrznych",cust_f4:"Przetwarzanie dokumentów przez API AI",cust_f5:"Każdy przepływ pracy kosztujący Cię więcej niż godzinę dziennie",how_label:"Proces",how_title:"Jak współpracujemy",how_desc:"Żadnych długich umów. Żadnej biurokracji. Jasna ścieżka od pierwszego telefonu do działającego systemu.",step1_title:"Rozmowa wstępna",step1_desc:"30 minut. Opisujesz przepływ pracy, my identyfikujemy co kosztuje Cię najwięcej.",step2_title:"Projekt systemu",step2_desc:"Mapujemy rozwiązanie, uzgadniamy zakres i cenę. Bez niespodzianek.",step3_title:"Budowa i testy",step3_desc:"Budujemy system, testujesz go na prawdziwych danych. Korekty są częścią procesu.",step4_title:"Wdrożenie i wsparcie",step4_desc:"System rusza. Zostajemy w kontakcie i rozwijamy go razem z Twoją firmą.",who_label:"Komu pomagamy",who_title:"Małe zespoły, poważna robota",who_desc:"Najlepiej pracujemy z firmami 1–50 osób, które szybko rosną, ale nie mogą sobie pozwolić na ceny enterprise.",who1_title:"Spedytorzy i przewoźnicy",who1_desc:"Transport międzynarodowy, 1–20 ciężarówek",who2_title:"Producenci",who2_desc:"Małe zakłady produkcyjne",who3_title:"Operatorzy logistyczni",who3_desc:"Magazyny i dystrybucja",who4_title:"Każdy biznes",who4_desc:"Z powtarzającymi się procesami do automatyzacji",con_label:"Kontakt",con_title:"Porozmawiajmy o Twoim przepływie pracy",con_desc:"Opisz swój największy ból operacyjny. Powiemy Ci czy i jak możemy go rozwiązać.",con_telegram:"Telegram — zapytaj o kontakt",con_location:"Słowacja · UE · Zdalnie na całym świecie",form_name:"Twoje imię",form_email:"Adres e-mail",form_company:"Firma / branża",form_msg:"Opisz co chcesz zautomatyzować...",form_send:"Wyślij wiadomość →",anim_custom:"<strong>To tylko przykłady.</strong> Każdy system budujemy od Twojego konkretnego wyzwania. Jeśli Twój proces tu nie jest — opisz go a zbudujemy dokładnie to, czego potrzebujesz."},
+  de:{nav_demo:"Live-Demos",nav_solutions:"Lösungen",nav_how:"So arbeiten wir",nav_contact:"Kontakt",badge:"Offen für neue Projekte",hero_title:"Ihr Geschäft läuft.<br><em>Wir lassen es fliegen.</em>",hero_sub:"Maßgeschneiderte Automatisierungssysteme für Logistik- und Produktionsunternehmen. Echte Lösungen aus echter Betriebserfahrung.",hero_cta:"Kontakt aufnehmen",hero_more:"Demos ansehen",stat1:"Branchenspezifische Systeme",stat2:"Weniger manuelle Arbeit",stat3:"KI-gestützte Dokumentenverarbeitung",stat4:"In der EU ansässig",anim_label:"Live-Demos",anim_title:"So fühlt sich Automatisierung an",anim_desc:"Fahren Sie mit der Maus über eine Karte, um den Prozess in Echtzeit zu sehen.",a1_title:"Auftragsverarbeitung",a1_sub:"E-Mail → Fahrerauftrag in 45 Sekunden",a1_hint:"Hover für Animation",a1_s1l:"E-Mail vom Spediteur",a1_s1d:"PDF-Auftrag angehängt",a1_s2l:"liest & extrahiert Daten",a1_s2d:"Daten, Adressen, Preise, Bedingungen",a1_s3l:"Fahrerauftrag erstellt",a1_s3d:"Sofort an Fahrer gesendet",a1_s4l:"Tabelle aktualisiert",a1_s4d:"Null manuelle Eingabe",a2_title:"Rechnungserstellung",a2_sub:"Auftrag wählen → Rechnung automatisch gesendet",a2_s1l:"Abgeschlossenen Auftrag wählen",a2_s1d:"Ein Klick im Dashboard",a2_s2l:"erstellt Rechnung als PDF",a2_s2d:"Alle Auftragsdaten vorausgefüllt",a2_s3l:"An Kunden gesendet",a2_s3d:"E-Mail mit PDF-Anhang",a2_s4l:"Zahlungsverfolgung gestartet",a2_s4d:"Fälligkeitsdatum automatisch berechnet",a3_title:"Versand der Originale",a3_sub:"CMR + Rechnungen → Umschläge gedruckt",a3_s1l:"Aufträge für Versand markieren",a3_s1d:"Abgeschlossene Lieferungen wählen",a3_s2l:"sammelt Dokumente",a3_s2d:"CMR + Rechnungen pro Umschlag",a3_s3l:"Registrierung über Post-API",a3_s3d:"Adressetiketten an Drucker gesendet",a3_s4l:"Einlegen & zur Post bringen",a3_s4d:"Kein Tippen, keine Fehler",without:"Ohne System",sol_label:"Lösungen",sol_title:"Für Ihre Branche entwickelt,<br>nicht für den Durchschnitt.",sol_desc:"Wir verkaufen keine Standardsoftware. Jedes System wird um Ihren tatsächlichen Arbeitsablauf herum gestaltet.",log_title:"Logistik-Automatisierung",log_desc:"Komplettes Betriebssystem für den internationalen Güterverkehr. Von der Auftragsentscheidung bis zur Abschlusszahlung — automatisiert.",log_f1:"Sofortige Frachtanalyse — Entscheidung in Sekunden",log_f2:"KI liest Spediteur-E-Mails, erstellt automatisch Fahreraufgaben",log_f3:"Echtzeit-LKW-Tracking via Telegram",log_f4:"Automatische Postregistrierung & Umschlagdruck für CMR-Originale",log_f5:"Vollständiges Finanz-Dashboard: Factoring, Forderungen, Zahlungskontrolle",log_f6:"Firmenbewertungssystem mit sofortiger Risikobewertung",mes_title:"Produktions-Automatisierung",mes_desc:"MES für Produktionsunternehmen. Aufträge, Prozesse, Materialien und Ergebnisse — in einer Oberfläche.",mes_f1:"Produktionsauftragsverwaltung mit vollständigen Prozessketten",mes_f2:"Automatische PDF-Technologieauftragsgenerierung",mes_f3:"Visuelle Ladungsplanungstools",mes_f4:"Material- und Geräteverfolgung",mes_f5:"Skizzen- und Vorlagenverwaltung nach Produkttyp",mes_f6:"Zugriffskontrolle und rollenbasierte Berechtigungen",cust_title:"Individuelle Automatisierung",cust_desc:"Haben Sie einen sich wiederholenden Prozess, der Ihrem Team Zeit kostet? Wir finden die Schwachstellen und bauen das System, das sie beseitigt.",cust_f1:"Kaltakquise-E-Mails mit KI-Personalisierung",cust_f2:"Google Sheets & Drive Automatisierung",cust_f3:"Telegram-Bots für interne Abläufe",cust_f4:"Dokumentenverarbeitung über KI-API",cust_f5:"Jeder Workflow, der mehr als eine Stunde pro Tag kostet",how_label:"Prozess",how_title:"So arbeiten wir zusammen",how_desc:"Keine langen Verträge. Kein Unternehmens-Unsinn. Nur ein klarer Prozess vom ersten Anruf bis zum funktionierenden System.",step1_title:"Erstes Gespräch",step1_desc:"30 Minuten. Sie erklären Ihren Workflow, wir identifizieren was Sie am meisten kostet.",step2_title:"Systementwurf",step2_desc:"Wir kartieren die Lösung, einigen uns auf Umfang und Preis. Keine Überraschungen.",step3_title:"Entwicklung & Test",step3_desc:"Wir bauen das System, Sie testen es mit echten Daten. Anpassungen sind Teil des Prozesses.",step4_title:"Einsatz & Support",step4_desc:"System geht live. Wir bleiben in Kontakt und entwickeln es mit Ihrem Unternehmen weiter.",who_label:"Wem wir helfen",who_title:"Kleine Teams, ernste Arbeit",who_desc:"Wir arbeiten am besten mit Unternehmen von 1–50 Personen, die schnell wachsen, aber sich keine Enterprise-Preise leisten können.",who1_title:"Spediteure & Frachtführer",who1_desc:"Internationaler Transport, 1–20 LKW",who2_title:"Hersteller",who2_desc:"Kleine Produktionsstätten",who3_title:"Logistikbetreiber",who3_desc:"Lagerhaltung & Distribution",who4_title:"Jedes Unternehmen",who4_desc:"Mit sich wiederholenden Prozessen zur Automatisierung",con_label:"Kontakt",con_title:"Sprechen wir über Ihren Workflow",con_desc:"Beschreiben Sie Ihren größten operativen Schmerzpunkt. Wir sagen Ihnen ob und wie wir ihn lösen können.",con_telegram:"Telegram — nach Kontakt fragen",con_location:"Slowakei · EU · Remote weltweit",form_name:"Ihr Name",form_email:"E-Mail-Adresse",form_company:"Unternehmen / Branche",form_msg:"Beschreiben Sie was Sie automatisieren möchten...",form_send:"Nachricht senden →",anim_custom:"<strong>Das sind nur Beispiele.</strong> Jedes System entwickeln wir ausgehend von Ihrer spezifischen Herausforderung. Wenn Ihr Workflow hier nicht gezeigt wird — beschreiben Sie ihn und wir bauen genau das, was Sie brauchen."},
+  fr:{nav_demo:"Démos live",nav_solutions:"Solutions",nav_how:"Comment on travaille",nav_contact:"Contact",badge:"Disponible pour de nouveaux projets",hero_title:"Votre entreprise tourne.<br><em>Nous la faisons voler.</em>",hero_sub:"Systèmes d'automatisation sur mesure pour les entreprises de logistique et de production. De vraies solutions issues d'une vraie expérience opérationnelle.",hero_cta:"Nous contacter",hero_more:"Voir les démos",stat1:"Systèmes spécialisés",stat2:"Moins de travail manuel",stat3:"Traitement de documents IA",stat4:"Basé dans l'UE",anim_label:"Démos live",anim_title:"Voyez ce que l'automatisation change",anim_desc:"Survolez chaque carte pour voir le processus en temps réel.",a1_title:"Traitement des commandes",a1_sub:"Email → tâche chauffeur en 45 secondes",a1_hint:"survolez pour animer",a1_s1l:"Email du transitaire",a1_s1d:"Commande PDF en pièce jointe",a1_s2l:"lit & extrait les données",a1_s2d:"Dates, adresses, tarifs, conditions",a1_s3l:"Tâche chauffeur créée",a1_s3d:"Envoyée instantanément au chauffeur",a1_s4l:"Tableau mis à jour",a1_s4d:"Zéro saisie manuelle",a2_title:"Génération de factures",a2_sub:"Sélectionner commande → facture envoyée auto",a2_s1l:"Sélectionner commande terminée",a2_s1d:"Un clic dans le tableau de bord",a2_s2l:"génère facture PDF",a2_s2d:"Toutes les données préremplies",a2_s3l:"Envoyée au client",a2_s3d:"Email avec pièce jointe PDF",a2_s4l:"Suivi paiement démarré",a2_s4d:"Date d'échéance calculée auto",a3_title:"Envoi des originaux",a3_sub:"CMR + factures → enveloppes imprimées",a3_s1l:"Marquer commandes à expédier",a3_s1d:"Sélectionner livraisons terminées",a3_s2l:"collecte les documents",a3_s2d:"CMR + factures par enveloppe",a3_s3l:"Enregistrement via API postale",a3_s3d:"Étiquettes envoyées à l'imprimante",a3_s4l:"Insérer & déposer à la poste",a3_s4d:"Sans frappe, sans erreurs",without:"Sans système",sol_label:"Solutions",sol_title:"Conçu pour votre secteur,<br>pas pour la moyenne.",sol_desc:"Nous ne vendons pas de logiciels génériques. Chaque système est conçu autour de votre flux de travail réel.",log_title:"Automatisation logistique",log_desc:"Système opérationnel complet pour le transport international. De la décision de commande au paiement final — automatisé.",log_f1:"Analyse fret instantanée — décision en quelques secondes",log_f2:"L'IA lit les emails des transitaires, crée automatiquement les tâches chauffeurs",log_f3:"Suivi camions en temps réel via Telegram",log_f4:"Enregistrement postal automatique & impression enveloppes pour originaux CMR",log_f5:"Dashboard financier complet: factoring, créances, suivi paiements",log_f6:"Système de notation des entreprises avec évaluation des risques instantanée",mes_title:"Automatisation production",mes_desc:"MES pour les entreprises de production. Commandes, processus, matériaux et résultats — dans une seule interface.",mes_f1:"Gestion des ordres de production avec chaînes de processus complètes",mes_f2:"Génération automatique d'ordres techniques PDF",mes_f3:"Outils visuels de planification de chargement",mes_f4:"Suivi matériaux et équipements",mes_f5:"Gestion des esquisses et modèles par type de produit",mes_f6:"Contrôle d'accès et permissions basées sur les rôles",cust_title:"Automatisation sur mesure",cust_desc:"Vous avez un processus répétitif qui grignote le temps de votre équipe? Nous trouvons les points faibles et construisons le système qui les élimine.",cust_f1:"Campagnes email à froid avec personnalisation IA",cust_f2:"Automatisation Google Sheets & Drive",cust_f3:"Bots Telegram pour opérations internes",cust_f4:"Traitement de documents via API IA",cust_f5:"Tout flux de travail coûtant plus d'une heure par jour",how_label:"Processus",how_title:"Comment nous travaillons ensemble",how_desc:"Pas de longs contrats. Pas de bureaucratie. Juste un processus clair du premier appel au système fonctionnel.",step1_title:"Premier appel",step1_desc:"30 minutes. Vous expliquez votre flux de travail, nous identifions ce qui vous coûte le plus.",step2_title:"Conception du système",step2_desc:"Nous cartographions la solution, convenons de la portée et du prix. Pas de surprises.",step3_title:"Développement & tests",step3_desc:"Nous construisons le système, vous le testez avec de vraies données. Les ajustements font partie du processus.",step4_title:"Déploiement & support",step4_desc:"Le système est mis en ligne. Nous restons en contact et le faisons évoluer avec votre entreprise.",who_label:"Qui nous aidons",who_title:"Petites équipes, travail sérieux",who_desc:"Nous travaillons mieux avec des entreprises de 1 à 50 personnes qui grandissent vite mais ne peuvent pas se permettre les prix enterprise.",who1_title:"Transitaires & transporteurs",who1_desc:"Transport international, 1–20 camions",who2_title:"Fabricants",who2_desc:"Petites installations de production",who3_title:"Opérateurs logistiques",who3_desc:"Entreposage & distribution",who4_title:"Toute entreprise",who4_desc:"Avec des processus répétitifs à automatiser",con_label:"Contact",con_title:"Parlons de votre flux de travail",con_desc:"Décrivez votre plus grand problème opérationnel. Nous vous dirons si et comment nous pouvons le résoudre.",con_telegram:"Telegram — demander le contact",con_location:"Slovaquie · UE · Remote dans le monde entier",form_name:"Votre nom",form_email:"Adresse email",form_company:"Entreprise / secteur",form_msg:"Décrivez ce que vous voulez automatiser...",form_send:"Envoyer le message →",anim_custom:"<strong>Ce ne sont que des exemples.</strong> Chaque système est construit à partir de votre défi spécifique. Si votre processus n'est pas montré ici — décrivez-le et nous construirons exactement ce dont vous avez besoin."},
+  it:{nav_demo:"Demo live",nav_solutions:"Soluzioni",nav_how:"Come lavoriamo",nav_contact:"Contatto",badge:"Disponibili per nuovi progetti",hero_title:"La tua azienda funziona.<br><em>Noi la facciamo volare.</em>",hero_sub:"Sistemi di automazione su misura per aziende di logistica e produzione. Soluzioni reali costruite su vera esperienza operativa.",hero_cta:"Contattaci",hero_more:"Vedi demo live",stat1:"Sistemi specifici di settore",stat2:"Meno lavoro manuale",stat3:"Elaborazione documenti AI",stat4:"Con sede nell'UE",anim_label:"Demo live",anim_title:"Vedi come si sente l'automazione",anim_desc:"Passa il mouse su ogni scheda per vedere il processo in tempo reale.",a1_title:"Elaborazione ordini",a1_sub:"Email → compito autista in 45 secondi",a1_hint:"passa il mouse per animare",a1_s1l:"Email dallo spedizioniere",a1_s1d:"Ordine PDF allegato",a1_s2l:"legge ed estrae dati",a1_s2d:"Date, indirizzi, tariffe, condizioni",a1_s3l:"Compito autista creato",a1_s3d:"Inviato istantaneamente all'autista",a1_s4l:"Foglio aggiornato",a1_s4d:"Zero inserimento manuale",a2_title:"Generazione fatture",a2_sub:"Seleziona ordine → fattura inviata automaticamente",a2_s1l:"Seleziona ordine completato",a2_s1d:"Un clic nella dashboard",a2_s2l:"genera fattura PDF",a2_s2d:"Tutti i dati dell'ordine precompilati",a2_s3l:"Inviata al cliente",a2_s3d:"Email con allegato PDF",a2_s4l:"Monitoraggio pagamento avviato",a2_s4d:"Scadenza calcolata automaticamente",a3_title:"Invio originali",a3_sub:"CMR + fatture → buste stampate",a3_s1l:"Contrassegna ordini per spedizione",a3_s1d:"Seleziona consegne completate",a3_s2l:"raccoglie documenti",a3_s2d:"CMR + fatture per busta",a3_s3l:"Registrazione tramite API postale",a3_s3d:"Etichette inviate alla stampante",a3_s4l:"Inserisci & porta all'ufficio postale",a3_s4d:"Nessuna digitazione, nessun errore",without:"Senza sistema",sol_label:"Soluzioni",sol_title:"Creato per il tuo settore,<br>non per la media.",sol_desc:"Non vendiamo software generico. Ogni sistema è progettato intorno al tuo flusso di lavoro reale.",log_title:"Automazione logistica",log_desc:"Sistema operativo completo per il trasporto merci internazionale. Dalla decisione dell'ordine al pagamento finale — automatizzato.",log_f1:"Analisi del carico istantanea — decisione in secondi",log_f2:"L'IA legge le email degli spedizionieri, crea automaticamente i compiti per i conducenti",log_f3:"Tracciamento camion in tempo reale via Telegram",log_f4:"Registrazione postale automatica & stampa buste per originali CMR",log_f5:"Dashboard finanziaria completa: factoring, crediti, monitoraggio pagamenti",log_f6:"Sistema di valutazione aziende con valutazione del rischio istantanea",mes_title:"Automazione produzione",mes_desc:"MES per aziende produttive. Ordini, processi, materiali e output — in un'unica interfaccia.",mes_f1:"Gestione ordini di produzione con catene di processo complete",mes_f2:"Generazione automatica ordini tecnici PDF",mes_f3:"Strumenti visivi di pianificazione carico",mes_f4:"Tracciamento materiali e attrezzature",mes_f5:"Gestione schizzi e modelli per tipo di prodotto",mes_f6:"Controllo accesso e permessi basati sui ruoli",cust_title:"Automazione su misura",cust_desc:"Hai un processo ripetitivo che mangia il tempo del tuo team? Troviamo i punti deboli e costruiamo il sistema che li elimina.",cust_f1:"Campagne email a freddo con personalizzazione AI",cust_f2:"Automazione Google Sheets & Drive",cust_f3:"Bot Telegram per operazioni interne",cust_f4:"Elaborazione documenti tramite API AI",cust_f5:"Qualsiasi flusso di lavoro che ti costa più di un'ora al giorno",how_label:"Processo",how_title:"Come lavoriamo insieme",how_desc:"Nessun contratto lungo. Nessuna burocrazia aziendale. Solo un processo chiaro dalla prima chiamata al sistema funzionante.",step1_title:"Prima chiamata",step1_desc:"30 minuti. Spieghi il tuo flusso di lavoro, noi identifichiamo cosa ti costa di più.",step2_title:"Progettazione sistema",step2_desc:"Mappiamo la soluzione, concordiamo ambito e prezzo. Nessuna sorpresa.",step3_title:"Sviluppo & test",step3_desc:"Costruiamo il sistema, lo testi con dati reali. Le modifiche sono parte del processo.",step4_title:"Distribuzione & supporto",step4_desc:"Il sistema va live. Rimaniamo in contatto e lo facciamo evolvere con la tua azienda.",who_label:"Chi aiutiamo",who_title:"Piccoli team, lavoro serio",who_desc:"Lavoriamo meglio con aziende da 1 a 50 persone che crescono velocemente ma non possono permettersi i prezzi enterprise.",who1_title:"Spedizionieri & vettori",who1_desc:"Trasporto internazionale, 1–20 camion",who2_title:"Produttori",who2_desc:"Piccoli impianti produttivi",who3_title:"Operatori logistici",who3_desc:"Magazzinaggio & distribuzione",who4_title:"Qualsiasi azienda",who4_desc:"Con processi ripetitivi da automatizzare",con_label:"Contatto",con_title:"Parliamo del tuo flusso di lavoro",con_desc:"Descrivi il tuo più grande problema operativo. Ti diremo se e come possiamo risolverlo.",con_telegram:"Telegram — chiedi il contatto",con_location:"Slovacchia · UE · Remote in tutto il mondo",form_name:"Il tuo nome",form_email:"Indirizzo email",form_company:"Azienda / settore",form_msg:"Descrivi cosa vuoi automatizzare...",form_send:"Invia messaggio →",anim_custom:"<strong>Questi sono solo esempi.</strong> Ogni sistema lo costruiamo partendo dalla tua sfida specifica. Se il tuo flusso di lavoro non è mostrato qui — descrivilo e costruiremo esattamente ciò di cui hai bisogno."},
+  es:{nav_demo:"Demos en vivo",nav_solutions:"Soluciones",nav_how:"Cómo trabajamos",nav_contact:"Contacto",badge:"Disponibles para nuevos proyectos",hero_title:"Tu negocio funciona.<br><em>Nosotros lo hacemos volar.</em>",hero_sub:"Sistemas de automatización a medida para empresas de logística y producción. Soluciones reales basadas en experiencia operativa real.",hero_cta:"Contáctanos",hero_more:"Ver demos en vivo",stat1:"Sistemas especializados",stat2:"Menos trabajo manual",stat3:"Procesamiento de documentos con IA",stat4:"Con sede en la UE",anim_label:"Demos en vivo",anim_title:"Ve cómo se siente la automatización",anim_desc:"Pasa el ratón sobre cada tarjeta para ver el proceso en tiempo real.",a1_title:"Procesamiento de pedidos",a1_sub:"Email → tarea conductor en 45 segundos",a1_hint:"pasa el ratón para animar",a1_s1l:"Email del transitario",a1_s1d:"Pedido PDF adjunto",a1_s2l:"lee y extrae datos",a1_s2d:"Fechas, direcciones, tarifas, condiciones",a1_s3l:"Tarea conductor creada",a1_s3d:"Enviada instantáneamente al conductor",a1_s4l:"Hoja actualizada",a1_s4d:"Cero entrada manual",a2_title:"Generación de facturas",a2_sub:"Seleccionar pedido → factura enviada automáticamente",a2_s1l:"Seleccionar pedido completado",a2_s1d:"Un clic en el panel",a2_s2l:"genera factura PDF",a2_s2d:"Todos los datos del pedido prellenados",a2_s3l:"Enviada al cliente",a2_s3d:"Email con archivo PDF adjunto",a2_s4l:"Seguimiento de pago iniciado",a2_s4d:"Fecha de vencimiento calculada automáticamente",a3_title:"Envío de originales",a3_sub:"CMR + facturas → sobres impresos",a3_s1l:"Marcar pedidos para envío",a3_s1d:"Seleccionar entregas completadas",a3_s2l:"recopila documentos",a3_s2d:"CMR + facturas por sobre",a3_s3l:"Registro via API postal",a3_s3d:"Etiquetas enviadas a la impresora",a3_s4l:"Insertar & llevar a correos",a3_s4d:"Sin escribir, sin errores",without:"Sin sistema",sol_label:"Soluciones",sol_title:"Creado para tu sector,<br>no para el promedio.",sol_desc:"No vendemos software genérico. Cada sistema se diseña alrededor de tu flujo de trabajo real.",log_title:"Automatización logística",log_desc:"Sistema operativo completo para transporte internacional de carga. Desde la decisión del pedido hasta el pago final — automatizado.",log_f1:"Análisis de carga instantáneo — decisión en segundos",log_f2:"La IA lee emails de transitarios, crea tareas de conductor automáticamente",log_f3:"Seguimiento de camiones en tiempo real via Telegram",log_f4:"Registro postal automatizado & impresión de sobres para originales CMR",log_f5:"Panel financiero completo: factoring, cuentas por cobrar, seguimiento de pagos",log_f6:"Sistema de calificación de empresas con evaluación de riesgo instantánea",mes_title:"Automatización de producción",mes_desc:"MES para empresas productivas. Pedidos, procesos, materiales y producción — desde una interfaz.",mes_f1:"Gestión de órdenes de producción con cadenas de proceso completas",mes_f2:"Generación automática de órdenes técnicas PDF",mes_f3:"Herramientas visuales de planificación de carga",mes_f4:"Seguimiento de materiales y equipos",mes_f5:"Gestión de bocetos y plantillas por tipo de producto",mes_f6:"Control de acceso y permisos basados en roles",cust_title:"Automatización a medida",cust_desc:"¿Tienes un proceso repetitivo que consume el tiempo de tu equipo? Encontramos los puntos débiles y construimos el sistema que los elimina.",cust_f1:"Campañas de email en frío con personalización IA",cust_f2:"Automatización de Google Sheets & Drive",cust_f3:"Bots de Telegram para operaciones internas",cust_f4:"Procesamiento de documentos via API de IA",cust_f5:"Cualquier flujo de trabajo que te cueste más de una hora al día",how_label:"Proceso",how_title:"Cómo trabajamos juntos",how_desc:"Sin contratos largos. Sin burocracia empresarial. Solo un proceso claro desde la primera llamada hasta el sistema funcionando.",step1_title:"Primera llamada",step1_desc:"30 minutos. Explicas tu flujo de trabajo, nosotros identificamos qué te cuesta más.",step2_title:"Diseño del sistema",step2_desc:"Mapeamos la solución, acordamos alcance y precio. Sin sorpresas.",step3_title:"Desarrollo & prueba",step3_desc:"Construimos el sistema, lo pruebas con datos reales. Los ajustes son parte del proceso.",step4_title:"Despliegue & soporte",step4_desc:"El sistema entra en funcionamiento. Permanecemos en contacto y lo evolucionamos con tu empresa.",who_label:"A quién ayudamos",who_title:"Equipos pequeños, trabajo serio",who_desc:"Trabajamos mejor con empresas de 1 a 50 personas que crecen rápido pero no pueden permitirse precios enterprise.",who1_title:"Transitarios & transportistas",who1_desc:"Transporte internacional, 1–20 camiones",who2_title:"Fabricantes",who2_desc:"Pequeñas instalaciones de producción",who3_title:"Operadores logísticos",who3_desc:"Almacenamiento & distribución",who4_title:"Cualquier empresa",who4_desc:"Con procesos repetitivos a automatizar",con_label:"Contacto",con_title:"Hablemos de tu flujo de trabajo",con_desc:"Describe tu mayor problema operativo. Te diremos si y cómo podemos resolverlo.",con_telegram:"Telegram — solicitar contacto",con_location:"Eslovaquia · UE · Remote en todo el mundo",form_name:"Tu nombre",form_email:"Dirección de email",form_company:"Empresa / sector",form_msg:"Describe qué quieres automatizar...",form_send:"Enviar mensaje →",anim_custom:"<strong>Estos son solo ejemplos.</strong> Cada sistema lo construimos desde tu desafío específico. Si tu flujo de trabajo no está aquí — descríbelo y construiremos exactamente lo que necesitas."}
+};
+
+let currentLang='en';
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  const t=translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k]!==undefined)el.innerHTML=t[k];});
+  document.querySelectorAll('[data-placeholder-i18n]').forEach(el=>{const k=el.getAttribute('data-placeholder-i18n');if(t[k]!==undefined)el.placeholder=t[k];});
+}
+</script>
+</body>
+</html>

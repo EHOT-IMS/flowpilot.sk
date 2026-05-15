@@ -40,7 +40,7 @@ nav {
 .lang-switch { display:flex; gap:0.3rem; flex-wrap:wrap; justify-content:flex-end; max-width:200px; }
 .lang-btn { background:none; border:1px solid var(--border); color:var(--muted); padding:0.18rem 0.45rem; border-radius:5px; font-size:0.68rem; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.2s; }
 .lang-btn:hover,.lang-btn.active { border-color:var(--accent); color:var(--accent); }
-@media(max-width:768px){ .nav-links { display:none; } nav { padding:0.5rem 1rem; } .nav-clock-label { display:none; } .lang-switch { max-width:160px; } .lang-btn { padding:0.15rem 0.35rem; font-size:0.65rem; } }
+@media(max-width:768px){ .nav-links { display:none; } nav { padding:0.5rem 1rem; } .lang-switch { max-width:160px; } .lang-btn { padding:0.15rem 0.35rem; font-size:0.65rem; } }
 @media(max-width:480px){ .hero { padding:7rem 1rem 3rem; } .contact-wrap { padding:1.5rem; } .anim-grid { gap:1rem; } }
 
 .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:8rem 2rem 4rem; position:relative; overflow:hidden; text-align:center; }
@@ -101,7 +101,7 @@ h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:clamp(1.8rem,4vw,
 .dots span { width:3px; height:3px; border-radius:50%; background:var(--amber); animation:dot 1.2s ease-in-out infinite; }
 .dots span:nth-child(2){animation-delay:.2s} .dots span:nth-child(3){animation-delay:.4s}
 @keyframes dot{0%,80%,100%{opacity:.2}40%{opacity:1}}
-.anim-result { margin-top:4px; padding:9px 11px; background:var(--bg3); border-radius:8px; border:1px solid var(--border); opacity:0; transform:translateY(6px); transition:opacity 0.5s,transform 0.5s; }
+.anim-result { margin-top:4px; padding:9px 11px; background:var(--bg3); border-radius:8px; border:1px solid var(--border); opacity:1; transform:none; transition:opacity 0.5s,transform 0.5s; }
 .anim-result.vis { opacity:1; transform:none; }
 .anim-result-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
 .anim-result-row:last-child { margin-bottom:0; }
@@ -245,8 +245,8 @@ footer a { color:var(--muted); text-decoration:none; }
         <div class="anim-step" id="c1s4"><div class="anim-step-icon green">✅</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a1_s4l">Sheet updated, filed</div><div class="anim-step-detail" data-i18n="a1_s4d">Zero manual entry</div></div></div>
       </div>
       <div class="anim-result" id="res1">
-        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r1b1"></div></div><div class="anim-result-val red">20 min</div></div>
-        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r1b2"></div></div><div class="anim-result-val grn">45 sec</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r1b1" style="width:100%"></div></div><div class="anim-result-val red">20 min</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r1b2" style="width:10%"></div></div><div class="anim-result-val grn">~2 min</div></div>
       </div>
     </div>
 
@@ -261,8 +261,8 @@ footer a { color:var(--muted); text-decoration:none; }
         <div class="anim-step" id="c2s4"><div class="anim-step-icon green">💰</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a2_s4l">Payment tracking started</div><div class="anim-step-detail" data-i18n="a2_s4d">Due date auto-calculated</div></div></div>
       </div>
       <div class="anim-result" id="res2">
-        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r2b1"></div></div><div class="anim-result-val red">15 min</div></div>
-        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r2b2"></div></div><div class="anim-result-val grn">30 sec</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r2b1" style="width:100%"></div></div><div class="anim-result-val red">15 min</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r2b2" style="width:13%"></div></div><div class="anim-result-val grn">~2 min</div></div>
       </div>
     </div>
 
@@ -277,8 +277,8 @@ footer a { color:var(--muted); text-decoration:none; }
         <div class="anim-step" id="c3s4"><div class="anim-step-icon green">📬</div><div class="anim-step-text"><div class="anim-step-label" data-i18n="a3_s4l">Insert &amp; drop at post office</div><div class="anim-step-detail" data-i18n="a3_s4d">No typing, no mistakes</div></div></div>
       </div>
       <div class="anim-result" id="res3">
-        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r3b1"></div></div><div class="anim-result-val red">40 min</div></div>
-        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r3b2"></div></div><div class="anim-result-val grn">3 min</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl" data-i18n="without">Without</div><div class="bar-track"><div class="bar-fill red" id="r3b1" style="width:100%"></div></div><div class="anim-result-val red">40 min</div></div>
+        <div class="anim-result-row"><div class="anim-result-lbl">FlowPilot</div><div class="bar-track"><div class="bar-fill grn" id="r3b2" style="width:10%"></div></div><div class="anim-result-val grn">~4 min</div></div>
       </div>
     </div>
 
@@ -414,7 +414,7 @@ function startAnim(n){
     setTimeout(()=>{
       const b1=document.getElementById(`r${n}b1`),b2=document.getElementById(`r${n}b2`);
       if(b1)b1.style.width='100%';
-      if(b2)b2.style.width=n===1?'3.75%':n===2?'3.33%':'7.5%';
+      if(b2)b2.style.width=n===1?'10%':n===2?'13%':'10%';
     },150);
   },4400);
 }
